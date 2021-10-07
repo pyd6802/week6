@@ -46,7 +46,7 @@ pipeline {
                }
           }
 
-          stage("Docker push") {
+          stage("Docker push me") {
                steps {
                     sh "docker push leszko/calculator:${BUILD_TIMESTAMP}"
                }
