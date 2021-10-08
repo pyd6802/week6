@@ -46,7 +46,7 @@ pipeline {
                }
           }
 
-          stage("Docker push me again again again again again") {
+          stage("Docker push me again again again again again again") {
                steps {
                     sh "docker push leszko/calculator:${BUILD_TIMESTAMP}"
                }
