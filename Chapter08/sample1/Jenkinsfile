@@ -27,7 +27,7 @@ podTemplate(containers: [
                     ./gradlew jacocoTestReport
                     '''
                     } catch(e) {
-                        echo "Code Coverage Failed - Feature Branch - Try 3"
+                        echo "Code Coverage Failed - Feature Branch - Try 5"
                     }
                     publishHTML (target: [
                       reportDir: 'Chapter08/sample1/build/reports/jacoco/test/html',
