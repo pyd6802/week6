@@ -11,47 +11,62 @@ podTemplate(containers: [
              git 'https://github.com/pyd6802/week6.git'
              container('gradle') {
                  stage('Build a gradle project') {
+                     echo "I am the ${env.BRANCH_NAME} branch, I am compiled here"
                      sh '''
                      cd Chapter08/sample1
                      chmod +x gradlew
                      ./gradlew test
                     '''
                     }
-
-                 stage("Code coverage") {
-                     try {
-                    sh '''
-                    pwd
-                    cd Chapter08/sample1
-                    ./gradlew jacocoTestCoverageVerification
-                    ./gradlew jacocoTestReport
-                    '''
-                    } catch(e) {
-                        echo "Code Coverage Failed - Feature Branch"
+                 stage('Code coverage') {
+                    echo "My CC branch is: ${env.BRANCH_NAME}"
+                    if(env.BRANCH_NAME == "master") {
+                        echo "I am the ${env.BRANCH_NAME} branch, code coverage runs here"
+                        try {
+                            sh '''
+                            pwd
+                            cd Chapter08/sample1
+                            ./gradlew jacocoTestCoverageVerification
+                            ./gradlew jacocoTestReport
+                            '''
+                            } catch(e) {
+                                echo "Code Coverage Failed - Not Master Branch"
+                            }
+                        publishHTML (target: [
+                        reportDir: 'Chapter08/sample1/build/reports/jacoco/test/html',
+                        reportFiles: 'index.html',
+                        reportName: "JaCoCo Report"
+                        ])
                     }
-                    publishHTML (target: [
-                      reportDir: 'Chapter08/sample1/build/reports/jacoco/test/html',
-                      reportFiles: 'index.html',
-                      reportName: "JaCoCo Report"
-                    ])
-                 }
-                 stage("Check style ") {
-                    try { 
-                    sh '''
-                    pwd
-                    cd Chapter08/sample1
-                    ./gradlew checkstyleMain 
-                    '''
-                    } catch(e) {
-                       echo "Checkstyle fails"
-                    } 
-                    publishHTML (target: [
-                      reportDir: 'Chapter08/sample1/build/reports/checkstyle',
-                      reportFiles: 'main.html',
-                      reportName: "Checkstyle Report"
-                    ])
-                 }
-           }
-       }
-   }
- }
+                    else {
+                         echo "I am the ${env.BRANCH_NAME} branch, Code Coverage not applicable"
+                         }
+                    }
+                 stage('Check style') {
+                    echo "My CS branch is: ${env.BRANCH_NAME}"
+                    if(env.BRANCH_NAME != "playground") {
+                        echo "I am the ${env.BRANCH_NAME} branch, checkstyle runs here"
+                        try { 
+                            sh '''
+                            pwd
+                            cd Chapter08/sample1
+                            ./gradlew checkstyleMain 
+                        '''
+                        } catch(e) {
+                            echo "Checkstyle fails"
+                        } 
+                        publishHTML (target: [
+                        reportDir: 'Chapter08/sample1/build/reports/checkstyle',
+                        reportFiles: 'main.html',
+                        reportName: "Checkstyle Report"
+                        ])                       
+                    }
+                     else {
+                         echo "I am the ${env.BRANCH_NAME} branch, Check Style Not applicable"
+                         }
+                    }
+                }
+                
+            }
+        }
+    }
