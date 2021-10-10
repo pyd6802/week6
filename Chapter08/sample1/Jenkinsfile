@@ -20,7 +20,7 @@ podTemplate(containers: [
 
                  stage("Code coverage") {
                     sh 'echo Branch $BRANCH_NAME'
-                    if(env.GIT_BRANCH == "origin/master") {
+                    if(env.GIT_BRANCH == "master") {
                     steps {
                         echo "I am the master branch, code coverage runs here"
                         try {
@@ -41,25 +41,29 @@ podTemplate(containers: [
                         }
                     }
                     else {
-                         echo "not applicable"
+                         echo "Code Coverage not applicable"
                          }
                 }
                  stage("Check style ") {
-                    if(env.GIT_BRANCH != "origin/playground") {
+                    sh 'echo Branch $BRANCH_NAME'
+                    if(env.GIT_BRANCH != "playground") {
+                    steps {
+                        echo "I am the master / feature branch, checkstyle runs here"
                         try { 
-                        sh '''
-                        pwd
-                        cd Chapter08/sample1
-                        ./gradlew checkstyleMain 
-                    '''
-                    } catch(e) {
-                       echo "Checkstyle fails"
-                    } 
-                    publishHTML (target: [
-                      reportDir: 'Chapter08/sample1/build/reports/checkstyle',
-                      reportFiles: 'main.html',
-                      reportName: "Checkstyle Report"
-                    ])
+                            sh '''
+                            pwd
+                            cd Chapter08/sample1
+                            ./gradlew checkstyleMain 
+                        '''
+                        } catch(e) {
+                            echo "Checkstyle fails"
+                        } 
+                        publishHTML (target: [
+                        reportDir: 'Chapter08/sample1/build/reports/checkstyle',
+                        reportFiles: 'main.html',
+                        reportName: "Checkstyle Report"
+                        ])
+                        }
                     }
                      else {
                          echo "Not applicable"
