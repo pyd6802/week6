@@ -7,7 +7,7 @@ podTemplate(containers: [
         ),
    ]) {
      node(POD_LABEL) {
-         stage('Run pipeline against a gradle project') {
+         stage('Run pipeline against a gradle project - Validate Playground') {
              git 'https://github.com/pyd6802/week6.git'
              container('gradle') {
                  stage('Build a gradle project') {
