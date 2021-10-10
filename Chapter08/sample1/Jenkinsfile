@@ -39,13 +39,21 @@ podTemplate(containers: [
                         ])
                     }
                     else {
+<<<<<<< HEAD
                          echo "I am the ${env.BRANCH_NAME} branch, Code Coverage not applicable"
+=======
+                         echo "I am the ${env.BRANCH_NAME} Code Coverage not applicable"
+>>>>>>> 54c48f1d848dee2302c472b8776613d435579f16
                          }
                     }
                  stage('Check style') {
                     echo "My CS branch is: ${env.BRANCH_NAME}"
                     if(env.BRANCH_NAME != "playground") {
+<<<<<<< HEAD
                         echo "I am the ${env.BRANCH_NAME} branch, checkstyle runs here"
+=======
+                        echo "I am the ${env.BRANCH_NAME} Branch, checkstyle runs here"
+>>>>>>> 54c48f1d848dee2302c472b8776613d435579f16
                         try { 
                             sh '''
                             pwd
@@ -62,7 +70,11 @@ podTemplate(containers: [
                         ])                       
                     }
                      else {
+<<<<<<< HEAD
                          echo "I am the ${env.BRANCH_NAME} branch, Check Style Not applicable"
+=======
+                         echo "I am the ${env.BRANCH_NAME} Check Style Not applicable"
+>>>>>>> 54c48f1d848dee2302c472b8776613d435579f16
                          }
                     }
                 }
