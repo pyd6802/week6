@@ -17,11 +17,10 @@ podTemplate(containers: [
                      ./gradlew test
                     '''
                     }
-
-                 stage("Code coverage") {
-                    sh 'echo Branch $BRANCH_NAME'
+                 stage('Code coverage') {
+                    sh 'echo CC Branch $BRANCH_NAME'
                     if(env.GIT_BRANCH == "master") {
-                    steps {
+                    step {
                         echo "I am the master branch, code coverage runs here"
                         try {
                             sh '''
@@ -43,11 +42,11 @@ podTemplate(containers: [
                     else {
                          echo "Code Coverage not applicable"
                          }
-                }
-                 stage("Check style ") {
-                    sh 'echo Branch $BRANCH_NAME'
+                    }
+                 stage('Check style') {
+                    sh 'echo CS Branch $BRANCH_NAME'
                     if(env.GIT_BRANCH != "playground") {
-                    steps {
+                    step {
                         echo "I am the master / feature branch, checkstyle runs here"
                         try { 
                             sh '''
@@ -68,7 +67,7 @@ podTemplate(containers: [
                      else {
                          echo "Not applicable"
                          }
-                 }
+                    }
            }
        }
    }
