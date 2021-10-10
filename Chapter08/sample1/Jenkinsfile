@@ -19,8 +19,7 @@ podTemplate(containers: [
                     }
 
                  stage("Code coverage") {
-                     echo "Branch ${GIT_BRANCH}"
-                     echo "Local Branch ${GIT_LOCAL_BRANCH}"
+                    sh 'echo Branch ${BRANCH_NAME}'
                     if(env.GIT_BRANCH == "origin/feature") {
                     steps {
                         echo "I am a feature branch"
