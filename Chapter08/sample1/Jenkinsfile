@@ -11,6 +11,7 @@ podTemplate(containers: [
              git 'https://github.com/pyd6802/week6.git'
              container('gradle') {
                  stage('Build a gradle project') {
+                     echo "I am the ${env.BRANCH_NAME} branch, I am compiled here"
                      sh '''
                      cd Chapter08/sample1
                      chmod +x gradlew
@@ -20,7 +21,7 @@ podTemplate(containers: [
                  stage('Code coverage') {
                     echo "My CC branch is: ${env.BRANCH_NAME}"
                     if(env.BRANCH_NAME == "master") {
-                        echo "I am the master branch, code coverage runs here"
+                        echo "I am the ${env.BRANCH_NAME} branch, code coverage runs here"
                         try {
                             sh '''
                             pwd
@@ -38,13 +39,13 @@ podTemplate(containers: [
                         ])
                     }
                     else {
-                         echo "Code Coverage not applicable"
+                         echo "I am the ${env.BRANCH_NAME} Code Coverage not applicable"
                          }
                     }
                  stage('Check style') {
-                    echo "My CS branch is: ${env.BRANCH_NAME}"
+                    echo "My CS branch is: ${env.BRANCH_NAME}"s
                     if(env.BRANCH_NAME != "playground") {
-                        echo "I am the master / feature branch, checkstyle runs here"
+                        echo "I am the ${env.BRANCH_NAME} Branch, checkstyle runs here"
                         try { 
                             sh '''
                             pwd
@@ -61,7 +62,7 @@ podTemplate(containers: [
                         ])                       
                     }
                      else {
-                         echo "CS Not applicable"
+                         echo "I am the ${env.BRANCH_NAME} Check Style Not applicable"
                          }
                     }
                 }
