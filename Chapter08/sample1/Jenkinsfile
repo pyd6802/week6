@@ -7,7 +7,7 @@ podTemplate(containers: [
         ),
    ]) {
      node(POD_LABEL) {
-         stage('Run pipeline against a gradle project - test FEATURE') {
+         stage('Run pipeline against a gradle project - test Pull and merger this test from FEATURE to MASTER') {
              git 'https://github.com/pyd6802/week6.git'
              container('gradle') {
                  stage('Build a gradle project') {
