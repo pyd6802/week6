@@ -19,7 +19,8 @@ podTemplate(containers: [
                     }
                  stage('Code coverage') {
                     sh 'echo CC Branch $BRANCH_NAME'
-                    if($BRANCH_NAME == "master") {
+                    echo "My CC branch is: ${env.BRANCH_NAME}"
+                    if(${env.BRANCH_NAME} == "master") {
                     step {
                         echo "I am the master branch, code coverage runs here"
                         try {
@@ -45,7 +46,8 @@ podTemplate(containers: [
                     }
                  stage('Check style') {
                     sh 'echo CS Branch $BRANCH_NAME'
-                    if($BRANCH_NAME != "playground") {
+                    echo "My CS branch is: ${env.BRANCH_NAME}"
+                    if(${env.BRANCH_NAME} != "playground") {
                     step {
                         echo "I am the master / feature branch, checkstyle runs here"
                         try { 
