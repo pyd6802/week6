@@ -20,7 +20,6 @@ podTemplate(containers: [
                  stage('Code coverage') {
                     echo "My CC branch is: ${env.BRANCH_NAME}"
                     if(env.BRANCH_NAME == "master") {
-                    steps {
                         echo "I am the master branch, code coverage runs here"
                         try {
                             sh '''
@@ -37,7 +36,6 @@ podTemplate(containers: [
                         reportFiles: 'index.html',
                         reportName: "JaCoCo Report"
                         ])
-                        }
                     }
                     else {
                          echo "Code Coverage not applicable"
@@ -46,7 +44,6 @@ podTemplate(containers: [
                  stage('Check style') {
                     echo "My CS branch is: ${env.BRANCH_NAME}"
                     if(env.BRANCH_NAME != "playground") {
-                    steps {
                         echo "I am the master / feature branch, checkstyle runs here"
                         try { 
                             sh '''
@@ -61,8 +58,7 @@ podTemplate(containers: [
                         reportDir: 'Chapter08/sample1/build/reports/checkstyle',
                         reportFiles: 'main.html',
                         reportName: "Checkstyle Report"
-                        ])
-                        }
+                        ])                       
                     }
                      else {
                          echo "CS Not applicable"
