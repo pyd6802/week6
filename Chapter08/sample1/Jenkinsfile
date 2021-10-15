@@ -106,9 +106,9 @@ podTemplate(yaml: '''
         }
         stage('Build Java Image') {
         container('kaniko') {
-            stage('Build a gradle project') {
+            stage('Create Dockerfile') {
             echo "My CS branch is: ${env.BRANCH_NAME}"
-              if(env.BRANCH_NAME = "master") {
+              if(env.BRANCH_NAME == "master") {
               echo "I am the ${env.BRANCH_NAME} branch, this is Docker Container version 1.0"
                 sh '''
                     echo 'FROM openjdk:8-jre' > Dockerfile
@@ -119,7 +119,7 @@ podTemplate(yaml: '''
                     '''
                 }
               else {
-                  if(env.BRANCH_NAME = "feature") { 
+                  if(env.BRANCH_NAME == "feature") { 
                   echo "I am the ${env.BRANCH_NAME} branch, This is Docker Container version 0.1"
                     sh '''
                         echo 'FROM openjdk:8-jre' > Dockerfile
