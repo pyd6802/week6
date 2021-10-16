@@ -36,10 +36,14 @@ podTemplate(yaml: '''
               path: config.json
     ''') {
       node(POD_LABEL) {
+        script {
+          env.TEST_PASSED = "true"
+        }
+        echo "TEST_PASSED: ${env.TEST_PASSED} - Startup Variable Check"
         stage('Pull gradle project from GitHub') {
             git 'https://github.com/pyd6802/week6.git'
         container('gradle') {
-            stage('Build a gradle project - FEATURE TEST') {
+            stage('Build a gradle project') {
                sh '''
                cd Chapter08/sample1
                chmod +x gradlew
@@ -67,7 +71,8 @@ podTemplate(yaml: '''
                        ./gradlew jacocoTestReport
                        '''
                        } catch(e) {
-                           echo "Code Coverage Failed - Not Master Branch"
+                           echo "${env.BRANCH_NAME} Code Coverage Failed"
+                           script {env.TEST_PASSED = "false"}
                        }
                    publishHTML (target: [
                    reportDir: 'Chapter08/sample1/build/reports/jacoco/test/html',
@@ -90,7 +95,8 @@ podTemplate(yaml: '''
                        ./gradlew checkstyleMain 
                    '''
                    } catch(e) {
-                       echo "Checkstyle fails"
+                       echo "${env.BRANCH_NAME} Checkstyle Failed"
+                       script {env.TEST_PASSED = "false"}
                    } 
                    publishHTML (target: [
                    reportDir: 'Chapter08/sample1/build/reports/checkstyle',
@@ -99,45 +105,52 @@ podTemplate(yaml: '''
                    ])                       
                }
                 else {
-                    echo "I am the ${env.BRANCH_NAME} branch, Check Style Not applicable"
+                    echo "I am the ${env.BRANCH_NAME} branch, Check Style not applicable"
                     }
                }
             }
         }
         stage('Build Java Image') {
         container('kaniko') {
-            stage('Create Dockerfile') {
-            echo "My CS branch is: ${env.BRANCH_NAME}"
-              if(env.BRANCH_NAME == "master") {
-              echo "I am the ${env.BRANCH_NAME} branch, this is Docker Container version 1.0"
-                sh '''
-                    echo 'FROM openjdk:8-jre' > Dockerfile
-                    echo 'COPY ./calculator-0.0.1-SNAPSHOT.jar app.jar' >> Dockerfile
-                    echo 'ENTRYPOINT ["java", "-jar", "app.jar"]' >> Dockerfile
-                    mv /mnt/calculator-0.0.1-SNAPSHOT.jar .
-                    /kaniko/executor --context `pwd` --destination pyd6802/calculator:1.0
-                    '''
-                }
-              else {
-                  if(env.BRANCH_NAME == "feature") { 
-                  echo "I am the ${env.BRANCH_NAME} branch, This is Docker Container version 0.1"
-                    sh '''
-                        echo 'FROM openjdk:8-jre' > Dockerfile
-                        echo 'COPY ./calculator-0.0.1-SNAPSHOT.jar app.jar' >> Dockerfile
-                        echo 'ENTRYPOINT ["java", "-jar", "app.jar"]' >> Dockerfile
-                        mv /mnt/calculator-0.0.1-SNAPSHOT.jar .
-                        /kaniko/executor --context `pwd` --destination pyd6802/calculator-feature:0.1
+            echo "Tests Passed Check is: ${env.TEST_PASSED}"  
+            if (env.TEST_PASSED == "true") {
+            echo 'All applicable tests passed, container will be created'
+              stage('Create Dockerfile') {
+              echo "My CS branch is: ${env.BRANCH_NAME}"
+                if(env.BRANCH_NAME == "master") {
+                echo "I am the ${env.BRANCH_NAME} branch, this is Docker Container version 1.0"
+                  sh '''
+                      echo 'FROM openjdk:8-jre' > Dockerfile
+                      echo 'COPY ./calculator-0.0.1-SNAPSHOT.jar app.jar' >> Dockerfile
+                      echo 'ENTRYPOINT ["java", "-jar", "app.jar"]' >> Dockerfile
+                      mv /mnt/calculator-0.0.1-SNAPSHOT.jar .
+                      /kaniko/executor --context `pwd` --destination pyd6802/calculator:1.0
                       '''
-                   }
-                   else {
-                     echo "I am the ${env.BRANCH_NAME} branch, Containter not applicable"
-                   }
+                  }
+                else {
+                    if(env.BRANCH_NAME == "feature") { 
+                    echo "I am the ${env.BRANCH_NAME} branch, This is Docker Container version 0.1"
+                      sh '''
+                          echo 'FROM openjdk:8-jre' > Dockerfile
+                          echo 'COPY ./calculator-0.0.1-SNAPSHOT.jar app.jar' >> Dockerfile
+                          echo 'ENTRYPOINT ["java", "-jar", "app.jar"]' >> Dockerfile
+                          mv /mnt/calculator-0.0.1-SNAPSHOT.jar .
+                          /kaniko/executor --context `pwd` --destination pyd6802/calculator-feature:0.1
+                        '''
+                     }
+                     else {
+                       echo "I am the ${env.BRANCH_NAME} branch, Containter not applicable"
+                     }
+                  }
                 }
-
+              }
+            else {
+                echo "${env.BRANCH_NAME} branch container build aborted due to test fail"
+                echo "Test Passed = ${env.TEST_PASSED}"
+              }
+            
             }
 
         }
-
-    }
-  }
+    } 
 }
