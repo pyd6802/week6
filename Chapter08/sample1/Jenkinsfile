@@ -73,7 +73,7 @@ podTemplate(yaml: '''
                        '''
                        } catch(e) {
                            echo "${env.BRANCH_NAME} Code Coverage Failed"
-                           def env.TEST_PASSED = "false"
+                           def TEST_PASSED = "false"
                        }
                    publishHTML (target: [
                    reportDir: 'Chapter08/sample1/build/reports/jacoco/test/html',
@@ -97,7 +97,7 @@ podTemplate(yaml: '''
                    '''
                    } catch(e) {
                        echo "${env.BRANCH_NAME} Checkstyle Failed"
-                       def env.TEST_PASSED = "false"
+                       def TEST_PASSED = "false"
                    } 
                    publishHTML (target: [
                    reportDir: 'Chapter08/sample1/build/reports/checkstyle',
