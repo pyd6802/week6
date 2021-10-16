@@ -140,15 +140,15 @@ podTemplate(yaml: '''
                        echo "I am the ${env.BRANCH_NAME} branch, Containter not applicable"
                      }
                   }
-
+                }
               }
             else {
                 echo "${env.BRANCH_NAME} branch container build aborted due to test fail"
                 echo "Test Passed = ${TEST_PASSED}"
-               }
+              }
+            
             }
-        }
 
-    }
-  }
+        }
+    } 
 }
