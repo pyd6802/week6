@@ -37,12 +37,12 @@ podTemplate(yaml: '''
     ''') {
       node(POD_LABEL) {
        environment {
-        TEST_PASSED = 'true'
+        env.TEST_PASSED = 'true'
         }
         stage('Pull gradle project from GitHub') {
             git 'https://github.com/pyd6802/week6.git'
         container('gradle') {
-            stage('Build a gradle project - PLAYGROUND TEST') {
+            stage('Build a gradle project') {
                sh '''
                cd Chapter08/sample1
                chmod +x gradlew
