@@ -144,8 +144,9 @@ podTemplate(yaml: '''
               }
             else {
                 echo "${env.BRANCH_NAME} branch container build aborted due to test fail"
+                echo "Test Passed = ${TEST_PASSED}"
+               }
             }
-          }
         }
 
     }
