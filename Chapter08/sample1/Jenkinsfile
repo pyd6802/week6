@@ -37,7 +37,7 @@ podTemplate(yaml: '''
     ''') {
       node(POD_LABEL) {
        environment {
-        env.TEST_PASSED = "true"
+        script env.TEST_PASSED = "true"
         }
         echo "${env.TEST_PASSED} Variable Stage 0"
         stage('Pull gradle project from GitHub') {
