@@ -36,8 +36,8 @@ podTemplate(yaml: '''
               path: config.json
     ''') {
       node(POD_LABEL) {
-       environment {
-         TEST_PASSED = "true"
+        script {
+          env.TEST_PASSED = "true"
         }
         echo "${env.TEST_PASSED} Variable Stage 0"
         stage('Pull gradle project from GitHub') {
@@ -73,7 +73,7 @@ podTemplate(yaml: '''
                        '''
                        } catch(e) {
                            echo "${env.BRANCH_NAME} Code Coverage Failed"
-                           def TEST_PASSED = "false"
+                           script {env.TEST_PASSED = "false"}
                        }
                    publishHTML (target: [
                    reportDir: 'Chapter08/sample1/build/reports/jacoco/test/html',
@@ -97,7 +97,7 @@ podTemplate(yaml: '''
                    '''
                    } catch(e) {
                        echo "${env.BRANCH_NAME} Checkstyle Failed"
-                       def TEST_PASSED = "false"
+                       script {env.TEST_PASSED = "false"}
                    } 
                    publishHTML (target: [
                    reportDir: 'Chapter08/sample1/build/reports/checkstyle',
