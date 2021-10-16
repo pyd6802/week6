@@ -39,7 +39,9 @@ podTemplate(yaml: '''
        environment {
         env.TEST_PASSED = "true"
         }
+        echo "${env.TEST_PASSED} Variable Stage 0"
         stage('Pull gradle project from GitHub') {
+            echo "${env.TEST_PASSED} Variable Stage 1"
             git 'https://github.com/pyd6802/week6.git'
         container('gradle') {
             stage('Build a gradle project') {
