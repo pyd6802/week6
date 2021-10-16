@@ -147,7 +147,6 @@ podTemplate(yaml: '''
             else {
                 echo "${env.BRANCH_NAME} branch container build aborted due to test fail"
                 echo "Test Passed = ${env.TEST_PASSED}"
-                currentBuild.rawBuild.@result = hudson.model.Result.SUCCESS
               }
             
             }
