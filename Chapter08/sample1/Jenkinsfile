@@ -111,8 +111,8 @@ podTemplate(yaml: '''
         }
         stage('Build Java Image') {
         container('kaniko') {
-          if (TEST_PASSED == 'true') {
-              echo 'All applicable tests passed, container will be created'
+            if (TEST_PASSED == 'true') {
+            echo 'All applicable tests passed, container will be created'
               stage('Create Dockerfile') {
               echo "My CS branch is: ${env.BRANCH_NAME}"
                 if(env.BRANCH_NAME == "master") {
@@ -142,8 +142,8 @@ podTemplate(yaml: '''
                   }
 
               }
-          else {
-              echo "${env.BRANCH_NAME} branch container build aborted due to test fail"
+            else {
+                echo "${env.BRANCH_NAME} branch container build aborted due to test fail"
             }
           }
         }
