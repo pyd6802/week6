@@ -71,7 +71,7 @@ podTemplate(yaml: '''
                        '''
                        } catch(e) {
                            echo "${env.BRANCH_NAME} Code Coverage Failed"
-                           TEST_PASSED = 'false'
+                           env.TEST_PASSED = 'false'
                        }
                    publishHTML (target: [
                    reportDir: 'Chapter08/sample1/build/reports/jacoco/test/html',
@@ -95,7 +95,7 @@ podTemplate(yaml: '''
                    '''
                    } catch(e) {
                        echo "${env.BRANCH_NAME} Checkstyle Failed"
-                       TEST_PASSED = 'false'
+                       env.TEST_PASSED = 'false'
                    } 
                    publishHTML (target: [
                    reportDir: 'Chapter08/sample1/build/reports/checkstyle',
@@ -111,7 +111,7 @@ podTemplate(yaml: '''
         }
         stage('Build Java Image') {
         container('kaniko') {
-            if (TEST_PASSED == 'true') {
+            if (env.TEST_PASSED == 'true') {
             echo 'All applicable tests passed, container will be created'
               stage('Create Dockerfile') {
               echo "My CS branch is: ${env.BRANCH_NAME}"
@@ -144,7 +144,7 @@ podTemplate(yaml: '''
               }
             else {
                 echo "${env.BRANCH_NAME} branch container build aborted due to test fail"
-                echo "Test Passed = ${TEST_PASSED}"
+                echo "Test Passed = ${env.TEST_PASSED}"
               }
             
             }
