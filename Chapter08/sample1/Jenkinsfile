@@ -39,7 +39,9 @@ podTemplate(yaml: '''
         script {
           env.TEST_PASSED = "true"
         }
-        echo "${env.TEST_PASSED} Variable Check"
+        echo "TEST_PASSED: ${env.TEST_PASSED} - Startup Variable Check"
+        stage('Pull gradle project from GitHub') {
+            git 'https://github.com/pyd6802/week6.git'
         container('gradle') {
             stage('Build a gradle project') {
                sh '''
