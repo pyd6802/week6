@@ -111,7 +111,7 @@ podTemplate(yaml: '''
         }
         stage('Build Java Image') {
         container('kaniko') {
-          if TEST_PASSED = 'true' {
+          if (TEST_PASSED == 'true') {
             echo 'All applicable tests passed, container will be created'
             stage('Create Dockerfile') {
             echo "My CS branch is: ${env.BRANCH_NAME}"
